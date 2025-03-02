@@ -33,4 +33,7 @@ or you can simply use docker desktop and click on stop button
 For any changes in your mocks, you can click 'restart'
 
 READ MORE
-Request Matching samples/keywords: https://wiremock.org/docs/request-matching/
+About Request Matching samples/keywords: https://wiremock.org/docs/request-matching/
+
+For dynamic responses: Read more on https://wiremock.org/2.x/docs/response-templating/
+If you want dynamic response (i.e random tokens / uuids), add `"transformers": ["response-template"]` inside the response

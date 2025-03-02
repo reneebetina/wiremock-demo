@@ -1,18 +1,65 @@
 {
-  "request": {
-    "method": "POST",
-    "url": "/login",
-    "bodyPatterns": [
-      {
-        "matchesJsonPath": "$[?(@.username == 'testUser' && @.password == 'testPass')]"
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/login",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$[?(@.username == 'testUser' && @.password == 'testPass')]"
+          }
+        ]
+      },
+      "response": {
+        "transformers": ["response-template"],
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": "success",
+          "user_id": "12345",
+          "message": "Login successful",
+          "token": "{{randomValue type='UUID'}}",
+          "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+        }
       }
-    ]
-  },
-  "response": {
-    "status": 200,
-    "bodyFileName": "login-response.json",
-    "headers": {
-      "Content-Type": "application/json"
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/login",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$[?(@.username != 'testUser' || @.password != 'testPass')]"
+          }
+        ]
+      },
+      "response": {
+        "status": 401,
+        "bodyFileName": "login-error-response.json",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/login",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$[?(@.password == 'expired')]"
+          }
+        ]
+      },
+      "response": {
+        "status": 401,
+        "bodyFileName": "login-password-expired-response.json",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
-  }
+  ]
 }
